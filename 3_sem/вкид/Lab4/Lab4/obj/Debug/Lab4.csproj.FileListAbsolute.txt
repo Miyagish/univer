@@ -1,0 +1,14 @@
+C:\Users\STAS-I7\Desktop\Lab4\Lab4\bin\Debug\Lab4.exe
+C:\Users\STAS-I7\Desktop\Lab4\Lab4\bin\Debug\Lab4.pdb
+C:\Users\STAS-I7\Desktop\Lab4\Lab4\obj\Debug\Lab4.csprojAssemblyReference.cache
+C:\Users\STAS-I7\Desktop\Lab4\Lab4\obj\Debug\MainWindow.g.cs
+C:\Users\STAS-I7\Desktop\Lab4\Lab4\obj\Debug\App.g.cs
+C:\Users\STAS-I7\Desktop\Lab4\Lab4\obj\Debug\Lab4_MarkupCompile.cache
+C:\Users\STAS-I7\Desktop\Lab4\Lab4\obj\Debug\Lab4_MarkupCompile.lref
+C:\Users\STAS-I7\Desktop\Lab4\Lab4\obj\Debug\MainWindow.baml
+C:\Users\STAS-I7\Desktop\Lab4\Lab4\obj\Debug\Lab4.g.resources
+C:\Users\STAS-I7\Desktop\Lab4\Lab4\obj\Debug\Lab4.Properties.Resources.resources
+C:\Users\STAS-I7\Desktop\Lab4\Lab4\obj\Debug\Lab4.csproj.GenerateResource.cache
+C:\Users\STAS-I7\Desktop\Lab4\Lab4\obj\Debug\Lab4.csproj.CoreCompileInputs.cache
+C:\Users\STAS-I7\Desktop\Lab4\Lab4\obj\Debug\Lab4.exe
+C:\Users\STAS-I7\Desktop\Lab4\Lab4\obj\Debug\Lab4.pdb

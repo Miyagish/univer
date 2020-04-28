@@ -1,0 +1,289 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <cstring>
+#include <cstdlib>
+#include "Header.h"
+using namespace std;
+
+void Planet::setName(char* Name) {
+	name = new char[strlen(Name) + 1];
+	strcpy(name, Name);
+}
+
+void Planet::setDiam(int Diam) {
+	diam = Diam;
+}
+void Planet::setSat(int Sat) {
+	sat = Sat;
+}
+void Planet::setLife(bool Live) {
+	life = Live;
+}
+
+
+char* Planet::getName() {
+	return name;
+}
+int Planet::getDiam() {
+	return diam;
+}
+int Planet::getSat() {
+	return sat;
+}
+bool Planet::getLife() {
+	return life;
+}
+
+Planet::Planet() : diam(0), sat(0), life(0)
+{
+	cout << "Создание ";
+	total++;
+	cout << total << endl;
+	char buf[] = "noname";
+	name = new char[strlen(buf) + 1];
+	strcpy(name, buf);
+}
+
+Planet* readfile(int &size) {
+
+	ifstream fin("D:\\dbase.txt");
+	if (!fin) { exit(1); }
+	fin >> size;
+	Planet* planets = new Planet[size];
+
+	for (int i = 0; i < size; i++)
+	{
+		fin >> planets[i];  //==============================================Перегрузка Оператора >>  ==========================================================
+	}
+	fin.close();
+	return planets;
+}
+
+void writefile(Planet* planets, int size) {
+
+	ofstream fout("D:\\dbase.txt", ios::trunc);
+	if (!fout) { exit(1); }
+
+	fout << size << endl;
+	for (int i = 0; i < size; i++)
+	{
+		fout << setw(8) << planets[i].getName() << "    ";
+		fout << setw(8) << planets[i].getDiam() << "    ";
+		fout << setw(4) << planets[i].getSat() << "    ";
+		fout << setw(3) << (planets[i].getLife() ? "1" : "0") << endl;
+	}
+	fout.close();
+}
+
+int menu1() {
+	cout << "Что вы Хотите Сделать??" << endl;
+	cout << "1. Прочитать файл" << endl;
+	cout << "2. Записать в файл" << endl;
+	cout << "3. Редактировать планету" << endl;
+	cout << "4. Вывести список планет и их характеристики" << endl;
+	cout << "5. Сортировать по уменьшению диаметра" << endl;
+	cout << "6. Сортировать по Названиям планет" << endl;
+	cout << "7. Добавить Новую Планету" << endl;
+	cout << "8. Удалить Существующую Планету" << endl;
+	cout << "9. Выход" << endl;
+	cout << "Введите цифру: ";
+	int choice;
+	cin >> choice;
+	cin.clear();
+	cin.ignore(10, '\n');
+	return choice;
+}
+
+void change(char*pl, int t, Planet* planets, int size) {
+
+	int iz = -1;
+
+	for (int i = 0; i < size; i++) {
+		if (strcmp(planets[i].getName(), pl) == 0) { iz = i;break; }
+
+	}
+	if (iz == -1) { cout << "Такой Планеты Нет!" << endl << endl; return; }
+	int r; bool b; char buf[20];
+	switch (t) {
+	case Name: {
+		cout << "Введите Новое Название" << endl;
+		cin >> buf;
+		planets[iz].setName(buf); break;
+	}
+	case Diam: {
+		cout << "Введите Новый Диаметр" << endl;
+		cin >> r;
+		if (r <= 0) { cout << "Неверные Данные! "; return; }
+		planets[iz].setDiam(r); break;
+	}
+	case Sat: {
+		cout << "Введите Новое Количество Спутников" << endl;
+		cin >> r;
+		if (r < 0) { cout << "Неверные Данные! "; return; }
+		planets[iz].setSat(r); break;
+	}
+	case Life: {
+		cout << "Введите Новое Состояние Жизни 1-Есть / 0-Нет :" << endl;
+		cin >> b;
+		planets[iz].setLife(b); break;
+	}
+
+	}
+	cout << "Изменения Внесены!" << endl << endl;
+	system("pause");
+	system("cls");
+}
+
+
+void sortDiam(Planet*planets, int size) {
+	Planet temp;
+	int max;
+
+	for (int i = 0; i < size - 1; i++)
+	{
+		max = i;
+		for (int j = i + 1; j < size; j++)
+		{
+			if (planets[j] > planets[max]) // ==========================================Перегрузка Оператора > ======================================================
+			{
+				max = j;
+			}
+		}
+		temp = planets[i];
+		planets[i] = planets[max];
+		planets[max] = temp;
+	}
+}
+
+void sortName(Planet*planets, int size) {
+	Planet temp;
+	int max;
+
+	for (int i = 0; i < size - 1; i++)
+	{
+		max = i;
+		for (int j = i + 1; j < size; j++)
+		{
+			if (planets[j] < planets[max]) // ==========================================Перегрузка Оператора < ======================================================
+			{
+				max = j;
+			}
+		}
+		temp = planets[i];
+		planets[i] = planets[max];
+		planets[max] = temp;
+	}
+}
+
+Planet* add(Planet*planets, int& size) {
+
+	Planet* newplanets = new Planet[size + 1];
+
+	for (int i = 0; i < size; i++) {
+		newplanets[i].setDiam(planets[i].getDiam());
+		newplanets[i].setSat(planets[i].getSat());
+		newplanets[i].setLife(planets[i].getLife());
+		newplanets[i].setName(planets[i].getName());
+	}
+	char buf[20]; int a; bool choice;
+	cout << "Введите Название Новой Планеты: " << endl; cin >> buf; cout << endl;
+
+	newplanets[size].setName(buf);
+
+	for (int i = 0; i < size; i++) {
+		if (planets[i] == newplanets[size]) {  // ==========================================Перегрузка Оператора ?==? ======================================================
+			cout << "Такая Планета Уже Существует!!! Продолжить? 1-Да / 0-Нет :";
+			cin >> choice;
+			if (choice == 0) { delete[]newplanets; return planets; }
+			cout << "Продолжаем!" << endl;
+		}
+	}
+	
+
+
+	cout << "Введите Количество Спутников Новой Планеты: " << endl; cin >> a; cout << endl; newplanets[size].setSat(a);
+	cout << "Введите Диаметр Новой Планеты: " << endl; cin >> a; cout << endl; newplanets[size].setDiam(a);
+	cout << "Введите Наличие Жизни на Новой Планете: 1-Есть / 0-Нет : " << endl; cin >> a; cout << endl; newplanets[size].setLife(a);
+	size += 1;
+	cout << "Планета Добавлена" << endl << endl;
+	delete[]planets;
+	return newplanets;
+}
+
+Planet* del(Planet*planets, int& size) {
+	char buf[20]; int iz = -1;
+	Planet* newplanets = new Planet[size - 1];
+
+	cout << "Введите Планету, которую хотите удалить: ";
+	cin >> buf;
+
+	for (int i = 0; i < size; i++) {
+		if (strcmp(planets[i].getName(), buf) == 0) { iz = i; break; }
+	}
+	if (iz == -1) { cout << "Такой Планеты Нет!";  delete[]newplanets; return planets; }
+
+	size -= 1;
+	for (int i = 0; i < iz; i++) {
+		newplanets[i].setDiam(planets[i].getDiam());
+		newplanets[i].setSat(planets[i].getSat());
+		newplanets[i].setLife(planets[i].getLife());
+		newplanets[i].setName(planets[i].getName());
+	}
+	for (int i = iz; i < size; i++) {
+		newplanets[i].setDiam(planets[i + 1].getDiam());
+		newplanets[i].setSat(planets[i + 1].getSat());
+		newplanets[i].setLife(planets[i + 1].getLife());
+		newplanets[i].setName(planets[i + 1].getName());
+	}
+	cout << "Планета Удалена!" << endl << endl;
+	delete[]planets;
+	return newplanets;
+}
+
+
+ostream& operator << (ostream& cout, Planet& planet) {
+
+	cout << " Name: " << setw(8) << planet.getName();
+	cout << " diam: " << setw(8) << planet.getDiam();
+	cout << " sat: " << setw(4) << planet.getSat();
+	cout << " life: " << setw(3) << planet.getLife() << endl;
+
+	return cout;
+}
+
+ifstream& operator >> (ifstream& fin, Planet& planet) {
+
+	char buf[20];
+	int d, s;
+	bool l;
+
+	fin >> buf; planet.setName(buf);
+	fin >> d; planet.setDiam(d);
+	fin >> s; planet.setSat(s);
+	fin >> l; planet.setLife(l);
+
+	return fin;
+}
+
+
+bool operator > (Planet& planet1, Planet& planet2) {  // Передаем по ссылки, а не по значению --> не создаются копии объектов
+
+	if (planet1.getDiam() > planet2.getDiam()) return true;
+	else return false;
+}
+
+bool operator < (Planet& planet1, Planet& planet2) {
+
+	if (strcmp(planet1.getName(), planet2.getName()) < 0) return true;
+	else return false;
+}
+
+bool operator == (Planet& planet1, Planet& planet2) {
+
+	if (strcmp(planet1.getName(), planet2.getName()) == 0) return true;
+	else return false;
+}
+
+

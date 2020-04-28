@@ -1,0 +1,68 @@
+#pragma once
+#pragma once
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+class Planet
+{
+private:
+	static int total;
+	char* name;
+	int diam;
+	int sat;
+	bool life;
+
+public:
+	Planet();
+
+	~Planet() { cout << "Удаление "; 
+	cout << total << endl;
+	total--;
+	}
+
+	//static int showTotal() { return total; }
+
+
+	void setName(char*);
+
+	void setDiam(int);
+	void setSat(int);
+	void setLife(bool);
+
+	char* getName();
+	int getDiam();
+	int getSat();
+	bool getLife();
+
+};
+
+
+
+enum tip { Name = 1, Diam, Sat, Life };
+
+Planet* readfile(int &);
+
+void writefile(Planet*, int);
+
+int menu1();
+
+void change(char*, int, Planet*, int);
+
+void sortDiam(Planet*, int);
+
+void sortName(Planet*, int);
+
+Planet* add(Planet*, int&);
+
+Planet* del(Planet*, int&);
+
+ostream& operator << (ostream&, Planet&);
+
+ifstream& operator >> (ifstream&, Planet&);
+
+bool operator > (Planet&, Planet&);
+
+bool operator < (Planet&, Planet&);
+
+bool operator == (Planet&, Planet&);

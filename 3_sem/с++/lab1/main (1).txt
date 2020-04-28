@@ -1,0 +1,96 @@
+#include <iostream>
+#include "Header.h"
+#include <fstream>
+using namespace std;
+
+int Planet::total = 0;
+int main() {
+	//setlocale(LC_ALL, "rus");
+	system("chcp 1251 > nul");
+	int size;
+	Planet* planets;
+
+	planets = readfile(size);
+
+	//int Planet::total = 0;
+	//cout << Planet::showTotal() << endl;
+
+	while (true) {
+
+		switch (menu1())
+		{
+		case 1:
+		{	system("cls");
+		planets = readfile(size);  
+		break;
+		}
+
+		case 2:
+		{	system("cls");
+		writefile(planets, size);  
+		break;
+		}
+
+		case 3:
+		{	system("cls");
+		cout << "Что Меняем?" << endl;
+		cout << "1. Название Планеты" << endl;
+		cout << "2. Диаметр" << endl;
+		cout << "3. Количество Спутников" << endl;
+		cout << "4. Наличие Жизни" << endl;
+
+		int t; cin >> t;
+		cout << "Введите Планету для изменения: ";
+		char bufs[20]; cin >> bufs;
+		change(bufs, t, planets, size);  
+		break;
+		}
+
+		case 4:
+		{		
+			system("cls");
+			for (int i = 0; i < size; i++) {
+				cout << i+1 << ". ";
+				cout << planets[i];  //======================================================Перегрузка Оператора <<==================================================
+			}
+			break;
+		}
+
+		case 5:
+		{	system("cls");
+		sortDiam(planets, size);
+		cout << "Сортировка Произведена!" << endl << endl;
+		break;
+		}
+
+		case 6:
+		{	system("cls");
+		sortName(planets, size);
+		cout << "Сортировка Произведена!" << endl << endl;
+		break;
+		}
+
+		case 7:
+		{	system("cls");
+		planets = add(planets, size);
+		break;
+		}
+
+		case 8:
+		{	system("cls");
+			planets = del(planets, size);
+			break;
+		}
+
+		case 9:
+		{	system("cls");
+			delete[]planets;
+			system("pause");
+			return 0;
+			}
+		}
+	}
+
+	system("pause");
+	return 0;
+}
