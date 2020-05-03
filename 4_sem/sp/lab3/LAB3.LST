@@ -1,0 +1,64 @@
+Turbo Assembler	 Version 3.1	    04/29/20 20:42:16	    Page 1
+lab3.asm
+
+
+
+      1	0000			     MYCODE SEGMENT 'CODE'
+      2					     ASSUME CS:MYCODE, DS:MYCODE
+      3	0000  41			     A_CHAR DB 'A'
+      4	0001  42			     B_CHAR DB 'B'
+      5	0002  43			     C_CHAR DB 'C'
+      6	0003				     START:
+      7					     ;‡ £ΰγ§ª  α¥£¬¥­β­®£® ΰ¥£¨αβΰ  ¤ ­­λε DS
+      8	0003  0E				     PUSH CS
+      9	0004  1F				     POP DS
+     10
+     11					     ;‚›‚„ 1 ‘‚‹€ € €
+     12	0005  B4 02				     MOV AH, 02
+     13	0007  8A 16 0000r			     MOV DL, A_CHAR
+     14	000B  CD 21				     INT 21H
+     15
+     16					     ;‚›‚„ 2 ‘‚‹€ € €
+     17	000D  B4 02				     MOV AH, 02
+     18	000F  8A 16 0000r			     MOV DL, A_CHAR
+     19	0013  CD 21				     INT 21H
+     20
+     21					     ;‚›‚„ 3 ‘‚‹€ € €
+     22	0015  B4 02				     MOV AH, 02
+     23	0017  8A 16 0000r			     MOV DL, A_CHAR
+     24	001B  CD 21				     INT 21H
+     25
+     26					     ;†„€… ‡€‚…… ƒ€›
+     27	001D  B4 01				     MOV AH, 01H
+     28	001F  CD 21				     INT 021H
+     29					     ;‚›•„ ‡ ƒ€›
+     30	0021  B0 00				     MOV AL, 0
+     31	0023  B4 4C				     MOV AH, 4CH
+     32	0025  CD 21				     INT 21H
+     33	0027					     MYCODE ENDS
+     34					     END START
+Turbo Assembler	 Version 3.1	    04/29/20 20:42:16	    Page 2
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "04/29/20"
+??FILENAME			  Text	 "lab3	  "
+??TIME				  Text	 "20:42:16"
+??VERSION			  Number 030A
+@CPU				  Text	 0101H
+@CURSEG				  Text	 MYCODE
+@FILENAME			  Text	 LAB3
+@WORDSIZE			  Text	 2
+A_CHAR				  Byte	 MYCODE:0000
+B_CHAR				  Byte	 MYCODE:0001
+C_CHAR				  Byte	 MYCODE:0002
+START				  Near	 MYCODE:0003
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+MYCODE				  16  0027 Para	  none	  CODE
+

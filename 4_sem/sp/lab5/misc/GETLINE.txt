@@ -1,0 +1,126 @@
+MYCODE SEGMENT 'CODE'
+	ASSUME CS:MYCODE, DS:DATA
+
+	CLRF PROC	; ПЕРЕВОД НА НОВУЮ СТРОКУ
+	
+		MOV DX, OFFSET LINE
+		MOV AH, 09H  ; выводит строку  08H ввод без вывода в консоль
+		INT 021H
+		RET
+	CLRF ENDP
+	
+	PUTCH PROC	; ПРОЦЕДУРА ВЫВОДА 1-ГО СИМВОЛА
+	
+		MOV AH, 02H
+		INT 021H
+	RET
+	PUTCH ENDP
+	
+	
+	GETCH PROC	; ПРОЦЕДУРА ВВОДА 1-ГО СИМВОЛА
+	
+		MOV AH, 08H
+		INT 021H
+	RET
+	GETCH ENDP	
+	
+	GETL PROC ; ПРОЦЕДУРА ВВОДА СТРОКИ
+		mov ah,0ah
+		MOV DX, OFFSET LINE_GET
+		int 021h ; ввод строки
+    
+		mov bl,[LINE_GET+1]
+		mov [LINE_GET+2+bx],'$' ; вставляем последним символом
+		RET
+	GETL ENDP
+	
+	PUTL PROC	; ПРОЦЕДУРА ВЫВОДА СТРОКИ
+		mov ah,9h
+		lea dx,LINE_GET+2
+		int 21h ; вывод
+		RET
+	PUTL ENDP
+	
+	HEX PROC	;ПЕРЕВОД СИМВОЛА В 16-УЮ СИСТЕМУ
+		MOV BX, OFFSET TABLEHEX
+		MOV AL, DH
+		SHR AL, 4
+		XLAT
+		MOV DL, AL
+		CALL PUTCH
+		
+		MOV AL, DH
+		AND AL, 0FH
+		XLAT
+		MOV DL, AL
+		CALL PUTCH
+		RET
+	HEX ENDP
+	
+	TRANS_LINE PROC
+	MOV CX, 0
+	
+	TRANSLATE:
+		MOV BX, CX
+		MOV DH, [LINE_GET+2+BX]
+		INC CX
+		CALL HEX
+		INC CX
+		CMP DH, '$'
+		MOV DL, ' '
+		CALL PUTCH
+		JE ENDF
+	LOOP TRANSLATE
+	
+	ENDF:
+	CALL CLRF
+	RET
+	TRANS_LINE ENDP
+	
+	
+	START:
+	;Загрузка сегментного регистра данных DS
+		PUSH CS
+		MOV AX, DATA
+		MOV DS, AX
+		
+		CALL GETL
+		CALL PUTL
+		
+		MOV DL, ' '
+		CALL PUTCH
+		MOV DL, '-'
+		CALL PUTCH
+		MOV DL, ' '
+		CALL PUTCH
+		
+		CALL TRANS_LINE
+		
+	;ОЖИДАНИЕ ЗАВЕРШЕНИЯ ПРОГРАММЫ
+		MOV AH, 01H
+		INT 021H
+		
+	;ВЫХОД ИЗ ПРОГРАММЫ
+		MOV AL, 0
+		MOV AH, 4CH; 4ch - завершение программы
+		INT 021H
+		
+		
+data segment
+
+LINE DB 0DH, 0AH, '$'
+	
+	LINE_GET db 40,?,40 Dup(?),'$'
+
+	
+	TABLEHEX DB '0123456789ABCDEF'
+	MAS DB 20 DUP (?)
+
+data ends
+
+stk segment stack
+db 256 dup(0)
+stk ends
+
+MYCODE ENDS
+END START
