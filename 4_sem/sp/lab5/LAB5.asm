@@ -35,8 +35,6 @@ CLRF PROC	; ……‚„ € ‚“ ‘’“
 		INC CX
 		CALL HEX
 		INC CX
-		CMP CX, 10
-		JE ENDF
 		MOV DL, ' '
 		CALL PUTCH
 		
@@ -70,9 +68,9 @@ CLRF PROC	; ……‚„ € ‚“ ‘’“
 	JMP END_GET_LINE
 	
 	OVERFLOW:
-	DEC BX
+	INC BX
 	MOV [LINE_GET+2+BX], '$'
-	JMP OVER_ENDL
+	JMP ENDL
 		
 	START:
 	; ‡ £ΰγ§ª  α¥£¬¥­β­®£® ΰ¥£¨αβΰ  ¤ ­­λε DS
@@ -98,7 +96,6 @@ CLRF PROC	; ……‚„ € ‚“ ‘’“
 				JE EXIT_PNT
 				CMP AL, 08H
 				JE BACK_SPACE
-				MOV [LINE_GET+21], $
 				
 				MOV [LINE_GET+2+BX], AL
 				INC BX
@@ -106,21 +103,15 @@ CLRF PROC	; ……‚„ € ‚“ ‘’“
 				END_GET_LINE:
 				
 			LOOP GET_LINE
-				cmp BX, 20
-				je  OVER_ENDL
 			
 			ENDL:
 			MOV [LINE_GET+2+BX], '$'
-			
-			OVER_ENDL:
-			MOV [LINE_GET+2+BX], '$'
 			MOV DL, ' '
 			CALL PUTCH
-			MOV DL, '-'
+			MOV DL, '='
 			CALL PUTCH
 			MOV DL, ' '
 			CALL PUTCH
-			
 			CALL TRANS_LINE
 			
 			POP CX
@@ -128,7 +119,6 @@ CLRF PROC	; ……‚„ € ‚“ ‘’“
 		LOOP GET_LINES
 			
 			
-		
 	EXIT_PNT:	; †„€… ‡€‚…… ƒ€›
 	
 		CALL CLRF
@@ -149,8 +139,8 @@ data segment
 
 LINE DB 0DH, 0AH, '$'
 
-	LINE_PUT db 20,?,20 Dup('$'),'$'
-	LINE_GET db 20,?,20 Dup('$'),'$'
+	LINE_PUT db 20,?,20 Dup(?),'$'
+	LINE_GET db 22,?,22 Dup(?),'$'
 
 	TABLEHEX DB '0123456789ABCDEF'
 	END_MESSAGE DB '‡€‚……… ƒ€›, „‹ „‹†… €†’… ‹“ “.$'
